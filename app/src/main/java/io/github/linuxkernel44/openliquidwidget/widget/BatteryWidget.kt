@@ -36,7 +36,6 @@ class BatteryWidget : GlassWidgetProvider(WidgetKind.Battery) {
             views.setTextColor(valueId, palette.secondary)
             views.setProgressBar(barId, 100, pct.coerceIn(0, 100), false)
             views.setColorStateList(barId, "setProgressTintList", ColorStateList.valueOf(palette.primary))
-            views.setColorStateList(barId, "setProgressBackgroundTintList", ColorStateList.valueOf(palette.secondary and 0x40FFFFFF))
         }
         row("battery", ctx.getString(R.string.battery_label), level, "$level%" + if (charging) " ⚡" else "", R.id.b_battery_bar, R.id.b_battery_label, R.id.b_battery_value)
         row("ram", ctx.getString(R.string.ram_label), (ramUsed * 100 / mem.totalMem).toInt(), "${gb(ctx, ramUsed)}/${gb(ctx, mem.totalMem)}", R.id.b_ram_bar, R.id.b_ram_label, R.id.b_ram_value)

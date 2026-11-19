@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/glass_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:importantForAccessibility="no"
+        android:scaleType="fitXY" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingTop="14dp"
+        android:paddingEnd="22dp"
+        android:paddingBottom="14dp">
+
+        <FrameLayout
+            android:layout_width="82dp"
+            android:layout_height="82dp">
+
+            <AnalogClock
+                android:id="@+id/ac_light"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:dial="@drawable/clock_dial_w"
+                android:hand_hour="@drawable/clock_hour_w"
+                android:hand_minute="@drawable/clock_minute_w" />
+
+            <AnalogClock
+                android:id="@+id/ac_dark"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:dial="@drawable/clock_dial_d"
+                android:hand_hour="@drawable/clock_hour_d"
+                android:hand_minute="@drawable/clock_minute_d"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextClock
+                android:id="@+id/ac_weekday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-light"
+                android:format12Hour="EEEE"
+                android:format24Hour="EEEE"
+                android:textSize="26sp" />
+
+            <TextClock
+                android:id="@+id/ac_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:format12Hour="MMMM d"
+                android:format24Hour="MMMM d"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

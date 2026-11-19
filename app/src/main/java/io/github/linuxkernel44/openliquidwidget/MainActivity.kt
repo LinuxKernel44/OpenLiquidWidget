@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -47,6 +48,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
@@ -196,7 +199,7 @@ private fun WidgetCard(kind: WidgetKind, backdrop: com.kyant.backdrop.Backdrop) 
     val ctx = LocalContext.current
     val p = GlassParams()
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        Box(Modifier.fillMaxWidth().height(120.dp).liquidGlass(backdrop, corner = p.cornerDp.dp, blurDp = p.blur)) {
+        Box(Modifier.fillMaxWidth().aspectRatio(kind.defaultWidthDp / kind.defaultHeightDp.toFloat()).liquidGlass(backdrop, corner = p.cornerDp.dp, blurDp = p.blur)) {
             WidgetContent(kind, Palette.Light)
         }
         Row(Modifier.fillMaxWidth().padding(horizontal = 4.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
@@ -206,7 +209,7 @@ private fun WidgetCard(kind: WidgetKind, backdrop: com.kyant.backdrop.Backdrop) 
             }
         }
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            GlassButton("Add to home screen", backdrop) { pin(ctx, kind) }
+            GlassButton("Add to home screen", backdrop, Modifier.semantics { contentDescription = "Add ${ctx.getString(kind.title)}" }) { pin(ctx, kind) }
             GlassButton("Customize", backdrop) {
                 ctx.startActivity(Intent(ctx, WidgetConfigActivity::class.java).putExtra(WidgetConfigActivity.EXTRA_KIND, kind.name))
             }

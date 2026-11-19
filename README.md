@@ -6,10 +6,11 @@ an own AGSL shader (blur, rim refraction with slight dispersion, tint, specular 
 
 | Gallery | Configurator | On the home screen |
 |---|---|---|
-| ![](docs/screenshots/gallery.png) | ![](docs/screenshots/configurator.png) | ![](docs/screenshots/home-clock.png) |
+| ![](docs/screenshots/gallery.png) | ![](docs/screenshots/configurator.png) | ![](docs/screenshots/home-clocks.png) |
 
 ## Widgets
-- **Clock** – time and date
+- **Clock** – digital time and date
+- **Analog clock** – a glass dial with the day and date
 - **Weather** – current conditions and today's range, city search via [Open-Meteo](https://open-meteo.com) (no API key, no location permission)
 - **System** – battery, memory, storage, network
 - **Music** – now playing with prev/play/next (needs notification access; no notification content is read)

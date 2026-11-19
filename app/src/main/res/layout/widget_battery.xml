@@ -35,6 +35,8 @@
             <ProgressBar
                 android:id="@+id/b_battery_bar"
                 style="?android:attr/progressBarStyleHorizontal"
+                android:progressDrawable="@drawable/progress_glass"
+                android:indeterminate="false"
                 android:layout_width="0dp"
                 android:layout_height="6dp"
                 android:layout_weight="1"
@@ -64,6 +66,8 @@
             <ProgressBar
                 android:id="@+id/b_ram_bar"
                 style="?android:attr/progressBarStyleHorizontal"
+                android:progressDrawable="@drawable/progress_glass"
+                android:indeterminate="false"
                 android:layout_width="0dp"
                 android:layout_height="6dp"
                 android:layout_weight="1"
@@ -93,6 +97,8 @@
             <ProgressBar
                 android:id="@+id/b_storage_bar"
                 style="?android:attr/progressBarStyleHorizontal"
+                android:progressDrawable="@drawable/progress_glass"
+                android:indeterminate="false"
                 android:layout_width="0dp"
                 android:layout_height="6dp"
                 android:layout_weight="1"

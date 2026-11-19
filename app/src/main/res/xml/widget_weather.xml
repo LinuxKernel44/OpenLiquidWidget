@@ -2,6 +2,7 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:configure="io.github.linuxkernel44.openliquidwidget.ui.WidgetConfigActivity"
     android:description="@string/widget_weather_desc"
+    android:previewImage="@drawable/preview_weather"
     android:initialLayout="@layout/widget_weather"
     android:minWidth="250dp"
     android:minHeight="110dp"

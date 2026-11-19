@@ -3,6 +3,8 @@
     <string name="app_name">OpenLiquidWidget</string>
     <string name="widget_clock">Clock</string>
     <string name="widget_clock_desc">Time and date on liquid glass.</string>
+    <string name="widget_clock_analog">Analog clock</string>
+    <string name="widget_clock_analog_desc">A glass dial with the day and date.</string>
     <string name="widget_weather">Weather</string>
     <string name="widget_weather_desc">Current conditions and today\'s range for a city you pick.</string>
     <string name="widget_battery">System</string>

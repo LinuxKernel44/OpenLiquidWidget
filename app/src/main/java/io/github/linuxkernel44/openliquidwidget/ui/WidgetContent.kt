@@ -39,6 +39,14 @@ fun WidgetContent(kind: WidgetKind, palette: Palette, modifier: Modifier = Modif
                 Text(java.text.SimpleDateFormat("h:mm", java.util.Locale.US).format(java.util.Date()), color = primary, fontSize = 60.sp, fontWeight = FontWeight.Thin, lineHeight = 64.sp)
                 Text(java.text.SimpleDateFormat("EEEE, MMM d", java.util.Locale.US).format(java.util.Date()), color = secondary, fontSize = 15.sp, fontWeight = FontWeight.Medium)
             }
+            WidgetKind.ClockAnalog -> Row(verticalAlignment = Alignment.CenterVertically) {
+                AnalogFace(primary, Modifier.size(82.dp))
+                Spacer(Modifier.width(18.dp))
+                Column {
+                    Text(java.text.SimpleDateFormat("EEEE", java.util.Locale.US).format(java.util.Date()), color = primary, fontSize = 26.sp, fontWeight = FontWeight.Light)
+                    Text(java.text.SimpleDateFormat("MMMM d", java.util.Locale.US).format(java.util.Date()), color = secondary, fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                }
+            }
             WidgetKind.Weather -> Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier.weight(1f)) {
                     Text("San Francisco", color = primary, fontSize = 15.sp, fontWeight = FontWeight.Medium)
@@ -91,5 +99,31 @@ private fun Bar(label: String, value: Float, text: String, primary: Color, secon
         Text(label, color = primary, fontSize = 13.sp, fontWeight = FontWeight.Medium, modifier = Modifier.width(64.dp))
         LinearProgressIndicator(progress = { value }, modifier = Modifier.weight(1f).height(6.dp).clip(RoundedCornerShape(3.dp)), color = primary, trackColor = secondary.copy(alpha = 0.25f), gapSize = 0.dp, drawStopIndicator = {})
         Text(text, color = secondary, fontSize = 13.sp, modifier = Modifier.width(82.dp), textAlign = androidx.compose.ui.text.style.TextAlign.End)
+    }
+}
+
+@Composable
+private fun AnalogFace(color: Color, modifier: Modifier) {
+    androidx.compose.foundation.Canvas(modifier) {
+        val c = center
+        val r = size.minDimension / 2f * 0.96f
+        drawCircle(color.copy(alpha = 0.55f), r, c, style = androidx.compose.ui.graphics.drawscope.Stroke(1.5.dp.toPx()))
+        for (i in 0 until 12) {
+            val a = Math.toRadians(i * 30.0 - 90)
+            val long = i % 3 == 0
+            val from = r * (if (long) 0.88f else 0.92f)
+            drawLine(color.copy(alpha = if (long) 1f else 0.6f), androidx.compose.ui.geometry.Offset(c.x + (from * Math.cos(a)).toFloat(), c.y + (from * Math.sin(a)).toFloat()),
+                androidx.compose.ui.geometry.Offset(c.x + (r * 0.97f * Math.cos(a)).toFloat(), c.y + (r * 0.97f * Math.sin(a)).toFloat()), 2.dp.toPx(), androidx.compose.ui.graphics.StrokeCap.Round)
+        }
+        val cal = java.util.Calendar.getInstance()
+        val min = cal.get(java.util.Calendar.MINUTE)
+        val hour = (cal.get(java.util.Calendar.HOUR) + min / 60f)
+        fun hand(angleDeg: Double, len: Float, w: Float) {
+            val a = Math.toRadians(angleDeg - 90)
+            drawLine(color, c, androidx.compose.ui.geometry.Offset(c.x + (len * Math.cos(a)).toFloat(), c.y + (len * Math.sin(a)).toFloat()), w, androidx.compose.ui.graphics.StrokeCap.Round)
+        }
+        hand(hour * 30.0, r * 0.5f, 4.dp.toPx())
+        hand(min * 6.0, r * 0.75f, 3.dp.toPx())
+        drawCircle(color, 3.dp.toPx(), c)
     }
 }

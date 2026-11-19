@@ -2,6 +2,7 @@
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:configure="io.github.linuxkernel44.openliquidwidget.ui.WidgetConfigActivity"
     android:description="@string/widget_notes_desc"
+    android:previewImage="@drawable/preview_notes"
     android:initialLayout="@layout/widget_notes"
     android:minWidth="250dp"
     android:minHeight="110dp"

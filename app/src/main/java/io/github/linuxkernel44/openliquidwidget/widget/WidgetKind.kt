@@ -14,6 +14,7 @@ enum class WidgetKind(
     val defaultHeightDp: Int,
 ) {
     Clock(ClockWidget::class.java, R.string.widget_clock, R.string.widget_clock_desc, 250, 110),
+    ClockAnalog(ClockAnalogWidget::class.java, R.string.widget_clock_analog, R.string.widget_clock_analog_desc, 250, 110),
     Weather(WeatherWidget::class.java, R.string.widget_weather, R.string.widget_weather_desc, 250, 110),
     Battery(BatteryWidget::class.java, R.string.widget_battery, R.string.widget_battery_desc, 250, 110),
     Music(MusicWidget::class.java, R.string.widget_music, R.string.widget_music_desc, 250, 110),

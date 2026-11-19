@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">OpenLiquidWidget</string>
+    <string name="widget_clock">Clock</string>
+    <string name="widget_clock_desc">Time and date on liquid glass.</string>
+    <string name="widget_weather">Weather</string>
+    <string name="widget_weather_desc">Current conditions and today\'s range for a city you pick.</string>
+    <string name="widget_battery">System</string>
+    <string name="widget_battery_desc">Battery, memory, storage and network at a glance.</string>
+    <string name="widget_music">Music</string>
+    <string name="widget_music_desc">Now playing with playback controls.</string>
+    <string name="widget_calendar">Calendar</string>
+    <string name="widget_calendar_desc">Your next events.</string>
+    <string name="widget_notes">Notes</string>
+    <string name="widget_notes_desc">A quick note, one tap away.</string>
+    <string name="music_prev">Previous</string>
+    <string name="music_play_pause">Play or pause</string>
+    <string name="music_next">Next</string>
+    <string name="notes_empty">Tap to write a note</string>
+    <string name="notes_header">Note</string>
+    <string name="calendar_header">Up next</string>
+    <string name="calendar_no_events">No upcoming events</string>
+    <string name="calendar_no_permission">Tap to allow calendar access</string>
+    <string name="music_nothing">Nothing playing</string>
+    <string name="music_need_access">Tap to allow notification access</string>
+    <string name="weather_pick_city">Tap to choose a city</string>
+    <string name="weather_unavailable">Weather unavailable</string>
+    <string name="battery_label">Battery</string>
+    <string name="ram_label">Memory</string>
+    <string name="storage_label">Storage</string>
+    <string name="charging">charging</string>
+    <string name="offline">Offline</string>
+    <string name="done">Done</string>
+    <string name="note_title">Note</string>
+    <string name="save">Save</string>
+</resources>

@@ -60,7 +60,7 @@ abstract class GlassWidgetProvider(val kind: WidgetKind) : AppWidgetProvider() {
         val params = GlassStore(ctx).get(id)
         val wPx = (wDp * dm.density).toInt().coerceAtLeast(64)
         val hPx = (hDp * dm.density).toInt().coerceAtLeast(64)
-        val glass = GlassRenderer.render(WallpaperSource.load(ctx), wPx, hPx, dm.density, params)
+        val glass = GlassRenderer.render(WallpaperSource.load(ctx), wPx, hPx, dm.density, params, AppPrefs(ctx).glassQuality)
         val views = RemoteViews(ctx.packageName, layoutRes)
         views.setImageViewBitmap(R.id.glass_bg, glass.bitmap)
         bind(ctx, views, id, Palette.forLightGlass(glass.isLight))

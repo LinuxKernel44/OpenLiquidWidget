@@ -23,6 +23,11 @@ glass off-screen with a `RenderNode` + AGSL `RuntimeShader` (`HardwareRenderer` 
 the widget's background. Text colour flips between white and dark based on the brightness of the rendered glass.
 Widgets refresh every 15 minutes (WorkManager) and whenever the app is opened.
 
+### Glass quality
+Same ladder as OpenLiquidLauncher, in the app's **Glass quality** card: *Minimum* (blur and tint only), *Low* (+ colour boost and rim refraction),
+*Current* (+ specular edge and sheen, the default), *High* (+ depth shading), *Maximum* (+ chromatic dispersion and a softer blur).
+**Widget resolution** (25%–150%) scales the resolution the home-screen glass is rendered at; the app's own live glass always renders at full resolution.
+
 ### Wallpaper caveats
 - Android 13+ lets an app read the *system* wallpaper only with **All files access**. Without it the app falls back to a generated mesh
   gradient, or an image you pick (**Backdrop → Image**).

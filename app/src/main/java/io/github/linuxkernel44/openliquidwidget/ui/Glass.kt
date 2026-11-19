@@ -18,18 +18,34 @@ import com.kyant.backdrop.drawBackdrop
 import com.kyant.backdrop.effects.blur
 import com.kyant.backdrop.effects.lens
 import com.kyant.backdrop.effects.vibrancy
+import com.kyant.backdrop.highlight.Highlight
+import com.kyant.backdrop.shadow.InnerShadow
+import com.kyant.backdrop.shadow.Shadow
+import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.ui.unit.DpOffset
+
+/** Current glass quality level (0..4, see QUALITY_LABELS); provided by the gallery from the settings. */
+val LocalGlassQuality = compositionLocalOf { 2 }
 
 /** A liquid-glass surface (Kyant0's AndroidLiquidGlass) over [backdrop]; the app's own chrome and the gallery previews use it. */
+@androidx.compose.runtime.Composable
 fun Modifier.liquidGlass(backdrop: Backdrop, corner: Dp = 28.dp, blurDp: Float = 6f, tint: Color = Color.White.copy(alpha = 0.12f)): Modifier {
     val shape = RoundedCornerShape(corner)
+    val q = LocalGlassQuality.current
+    // Same ladder as the home-screen glass: Minimum blur only; Low + vibrancy and lens; Current + edge highlight and shadow;
+    // High + inner shadow; Maximum + chromatic dispersion and a softer blur.
     return drawBackdrop(
         backdrop = backdrop,
         shape = { shape },
         effects = {
-            vibrancy()
-            if (blurDp > 0f) blur(blurDp.dp.toPx())
-            lens(refractionHeight = 14.dp.toPx(), refractionAmount = 26.dp.toPx())
+            if (q >= 1) vibrancy()
+            val b = blurDp * (if (q >= 4) 1.25f else 1f)
+            if (b > 0f) blur(b.dp.toPx())
+            if (q >= 1) lens(refractionHeight = 14.dp.toPx(), refractionAmount = 26.dp.toPx(), chromaticAberration = q >= 4)
         },
+        highlight = if (q >= 2) ({ Highlight.Default }) else null,
+        shadow = if (q >= 2) ({ Shadow.Default }) else null,
+        innerShadow = if (q >= 3) ({ InnerShadow(radius = 10.dp, offset = DpOffset(0.dp, 10.dp), color = Color.Black.copy(alpha = 0.10f)) }) else null,
         onDrawSurface = {
             drawRect(Color.Black.copy(alpha = 0.10f))
             drawRect(tint)

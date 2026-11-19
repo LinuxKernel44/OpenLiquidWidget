@@ -58,7 +58,16 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import com.kyant.backdrop.backdrops.layerBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 import io.github.linuxkernel44.openliquidwidget.data.AppPrefs
+import io.github.linuxkernel44.openliquidwidget.data.GLASS_RESOLUTIONS
 import io.github.linuxkernel44.openliquidwidget.data.GlassParams
+import io.github.linuxkernel44.openliquidwidget.data.GlassQuality
+import io.github.linuxkernel44.openliquidwidget.data.QUALITY_HINTS
+import io.github.linuxkernel44.openliquidwidget.data.QUALITY_LABELS
+import io.github.linuxkernel44.openliquidwidget.ui.LocalGlassQuality
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.material3.Slider
+import androidx.compose.material3.SliderDefaults
+import androidx.compose.runtime.mutableStateOf
 import io.github.linuxkernel44.openliquidwidget.data.WallpaperMode
 import io.github.linuxkernel44.openliquidwidget.glass.WallpaperSource
 import io.github.linuxkernel44.openliquidwidget.ui.GlassButton
@@ -104,7 +113,9 @@ private fun Gallery() {
         value = withContext(Dispatchers.IO) { WallpaperSource.load(ctx).asImageBitmap() }
     }
     val backdrop = rememberLayerBackdrop()
+    var quality by remember { mutableStateOf(prefs.glassQuality) }
 
+    CompositionLocalProvider(LocalGlassQuality provides quality.level) {
     Box(Modifier.fillMaxSize().background(Color(0xFF0B1030))) {
         wallpaper?.let { Image(it, null, Modifier.fillMaxSize().layerBackdrop(backdrop), contentScale = ContentScale.Crop) }
         LazyColumn(
@@ -119,10 +130,12 @@ private fun Gallery() {
                 }
             }
             item { WallpaperCard(backdrop, prefs, tick) { revision++ } }
+            item { QualityCard(backdrop, quality) { quality = it; prefs.glassQuality = it; thread { runCatching { GlassWidgetProvider.updateAll(ctx) } } } }
             item { PermissionsCard(backdrop, tick) }
             items(WidgetKind.entries) { WidgetCard(it, backdrop) }
             item { Spacer(Modifier.height(24.dp)) }
         }
+    }
     }
 }
 
@@ -221,4 +234,28 @@ private fun pin(ctx: android.content.Context, kind: WidgetKind) {
     val manager = AppWidgetManager.getInstance(ctx)
     if (manager.isRequestPinAppWidgetSupported) manager.requestPinAppWidget(ComponentName(ctx, kind.provider), null, null)
     else android.widget.Toast.makeText(ctx, "Your launcher can't pin widgets from apps. Long-press the home screen instead.", android.widget.Toast.LENGTH_LONG).show()
+}
+
+@Composable
+private fun QualityCard(backdrop: com.kyant.backdrop.Backdrop, quality: GlassQuality, onChange: (GlassQuality) -> Unit) {
+    var slider by remember(quality.resolutionIndex) { mutableStateOf(quality.resolutionIndex.toFloat()) }
+    SectionCard(backdrop, "Glass quality") {
+        Text("Lower levels and resolutions are lighter on battery and faster to render. Quality applies to the app and the home-screen widgets.", color = Color.White.copy(alpha = 0.75f), fontSize = 13.sp)
+        Text("Effects quality", color = Color.White, fontSize = 15.sp, fontWeight = FontWeight.Medium)
+        androidx.compose.foundation.layout.FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            QUALITY_LABELS.forEachIndexed { i, label -> GlassButton(if (quality.level == i) "● $label" else label, backdrop) { onChange(quality.copy(level = i)) } }
+        }
+        Text(QUALITY_HINTS[quality.level], color = Color.White.copy(alpha = 0.75f), fontSize = 13.sp)
+        Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween) {
+            Text("Widget resolution", color = Color.White, fontSize = 15.sp, fontWeight = FontWeight.Medium)
+            Text("${(GLASS_RESOLUTIONS[slider.toInt()] * 100).toInt()}%", color = Color.White, fontSize = 15.sp)
+        }
+        Slider(
+            value = slider, onValueChange = { slider = it }, valueRange = 0f..GLASS_RESOLUTIONS.lastIndex.toFloat(), steps = GLASS_RESOLUTIONS.size - 2,
+            onValueChangeFinished = { if (slider.toInt() != quality.resolutionIndex) onChange(quality.copy(resolutionIndex = slider.toInt())) },
+            colors = SliderDefaults.colors(thumbColor = Color.White, activeTrackColor = Color.White, inactiveTrackColor = Color.White.copy(alpha = 0.3f), activeTickColor = Color.Transparent, inactiveTickColor = Color.Transparent),
+        )
+        Text("Resolution scales the home-screen glass only; the app's own glass always renders at full resolution.", color = Color.White.copy(alpha = 0.6f), fontSize = 12.sp)
+        GlassButton("Reset to default", backdrop) { onChange(GlassQuality()) }
+    }
 }

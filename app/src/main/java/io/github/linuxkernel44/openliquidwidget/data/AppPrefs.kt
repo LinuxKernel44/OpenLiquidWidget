@@ -32,6 +32,13 @@ class AppPrefs(context: Context) {
         get() = prefs.getLong("wallpaperRevision", 0)
         set(v) = prefs.edit { putLong("wallpaperRevision", v) }
 
+    var glassQuality: GlassQuality
+        get() = GlassQuality(
+            prefs.getInt("quality", GlassQuality.DEFAULT_LEVEL).coerceIn(0, QUALITY_LABELS.lastIndex),
+            prefs.getInt("resolution", GlassQuality.DEFAULT_RESOLUTION).coerceIn(0, GLASS_RESOLUTIONS.lastIndex),
+        )
+        set(v) = prefs.edit { putInt("quality", v.level); putInt("resolution", v.resolutionIndex) }
+
     var fahrenheit: Boolean
         get() = prefs.getBoolean("fahrenheit", java.util.Locale.getDefault().country == "US")
         set(v) = prefs.edit { putBoolean("fahrenheit", v) }

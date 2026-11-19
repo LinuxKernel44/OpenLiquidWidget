@@ -123,7 +123,7 @@ private fun ConfigScreen(kind: WidgetKind, storeId: Int, onDone: () -> Unit, onC
         delay(60) // debounce slider drags: produceState restarts (and cancels) on every change
         value = withContext(Dispatchers.Default) {
             runCatching {
-                GlassRenderer.render(WallpaperSource.load(ctx), (kind.defaultWidthDp * density).toInt(), (kind.defaultHeightDp * density).toInt(), density, params)
+                GlassRenderer.render(WallpaperSource.load(ctx), (kind.defaultWidthDp * density).toInt(), (kind.defaultHeightDp * density).toInt(), density, params, prefs.glassQuality)
             }.getOrNull()
         }
     }

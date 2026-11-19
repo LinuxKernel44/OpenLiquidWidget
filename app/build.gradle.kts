@@ -1,7 +1,17 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
 }
+
+// Release signing: read from keystore.properties (path in KEYSTORE_PROPERTIES, default ~/openliquidwidget-signing/keystore.properties).
+// Nothing secret is stored in the repository. Without credentials the release falls back to the debug key.
+val signingProps = Properties().apply {
+    val f = file(System.getenv("KEYSTORE_PROPERTIES") ?: "${System.getProperty("user.home")}/openliquidwidget-signing/keystore.properties")
+    if (f.exists()) f.inputStream().use(::load)
+}
+val hasReleaseSigning = signingProps.getProperty("storeFile")?.let { file(it).exists() } == true
 
 android {
     namespace = "io.github.linuxkernel44.openliquidwidget"
@@ -16,12 +26,21 @@ android {
         androidResources.localeFilters += arrayOf("en")
     }
 
+    signingConfigs {
+        if (hasReleaseSigning) create("release") {
+            storeFile = file(signingProps.getProperty("storeFile"))
+            storePassword = signingProps.getProperty("storePassword")
+            keyAlias = signingProps.getProperty("keyAlias")
+            keyPassword = signingProps.getProperty("keyPassword")
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            signingConfig = signingConfigs.getByName("debug")
+            signingConfig = signingConfigs.getByName(if (hasReleaseSigning) "release" else "debug")
         }
     }
     buildFeatures {
@@ -34,6 +53,16 @@ android {
     }
     lint {
         checkReleaseBuilds = false
+    }
+}
+
+androidComponents {
+    onVariants { variant ->
+        variant.outputs.forEach { output ->
+            (output as? com.android.build.api.variant.impl.VariantOutputImpl)?.outputFileName?.set(
+                "OpenLiquidWidget-${variant.outputs.first().versionName.get()}-${variant.buildType}.apk",
+            )
+        }
     }
 }
 

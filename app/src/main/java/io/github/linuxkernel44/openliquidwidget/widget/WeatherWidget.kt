@@ -1,6 +1,10 @@
 package io.github.linuxkernel44.openliquidwidget.widget
 
+import android.app.PendingIntent
+import android.appwidget.AppWidgetManager
 import android.content.Context
+import android.content.Intent
+import io.github.linuxkernel44.openliquidwidget.ui.WidgetConfigActivity
 import android.widget.RemoteViews
 import io.github.linuxkernel44.openliquidwidget.R
 import io.github.linuxkernel44.openliquidwidget.data.AppPrefs
@@ -48,4 +52,12 @@ class WeatherWidget : GlassWidgetProvider(WidgetKind.Weather) {
             views.setTextViewText(R.id.w_range, "H ${w.high}°  L ${w.low}°")
         }
     }
+
+    // Without a city, tapping the widget opens its configurator (city search) instead of the app.
+    override fun clickIntent(ctx: Context, id: Int): PendingIntent =
+        if (AppPrefs(ctx).city(id) != null) super.clickIntent(ctx, id)
+        else PendingIntent.getActivity(
+            ctx, id, Intent(ctx, WidgetConfigActivity::class.java).putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, id),
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
+        )
 }
